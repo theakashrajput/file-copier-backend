@@ -78,5 +78,11 @@ export default (err, req, res, next) => {
     if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
 
     sendErrorProd(error, res);
+  } else {
+    console.log('Problem in envData invalid');
+    return res.status(500).json({
+      status: 'error',
+      message: 'Something went very wrong!',
+    });
   }
 };
