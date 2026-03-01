@@ -1,14 +1,15 @@
 import app from './src/app.js';
 import envData from './config/envData.config.js';
 import connectToDB from './config/db/db.js';
+import logger from './config/logger.config.js';
 
 const PORT = envData.PORT || 5000;
 
 // 1. UNCAUGHT EXCEPTIONS (Sync bugs)
 // Must be defined at the very top
 process.on('uncaughtException', (err) => {
-  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
+  logger.error('UNCAUGHT EXCEPTION! 💥 Shutting down...', { error: err });
+  logger.error(`${err.name}: ${err.message}`, { stack: err.stack });
   process.exit(1);
 });
 
@@ -17,18 +18,18 @@ let server;
 connectToDB()
   .then(() => {
     server = app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      logger.info(`Server is running on port ${PORT}`);
     });
   })
   .catch((error) => {
-    console.log('Error in connecting to MongoDB', error);
+    logger.error('Error in connecting to MongoDB', { error });
     process.exit(1);
   });
 
 // 2. UNHANDLED REJECTIONS (Async bugs)
 process.on('unhandledRejection', (err) => {
-  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
+  logger.error('UNHANDLED REJECTION! 💥 Shutting down...', { error: err });
+  logger.error(`${err.name}: ${err.message}`, { stack: err.stack });
 
   // Check if server exists before trying to close it
   if (server) {

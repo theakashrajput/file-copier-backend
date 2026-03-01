@@ -17,11 +17,11 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/refresh-token', refreshTokens);
+router.post('/logout', verifyJWT, logoutUser);
 
 router.get('/all', getAllUsers);
 
 router.get('/me', verifyJWT, getMe);
-router.post('/logout', verifyJWT, logoutUser);
 // router.post('/forgot-password', forgotPassword);
 // router.post('/reset-password', resetPassword);
 // router.post('/change-password', changePassword);

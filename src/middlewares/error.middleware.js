@@ -37,6 +37,8 @@ const sendErrorDev = (err, res) => {
   });
 };
 
+import logger from '../../config/logger.config.js';
+
 const sendErrorProd = (err, res) => {
   // A) Operational, trusted error: send message to client
   if (err.isOperational) {
@@ -47,8 +49,8 @@ const sendErrorProd = (err, res) => {
   }
   // B) Programming or other unknown error: don't leak details
   else {
-    // 1) Log error to console (or logging service like Winston/Sentry)
-    console.error('ERROR 💥', err);
+    // 1) Log error to console and logging service Winston
+    logger.error(`ERROR 💥: ${err.message}`, { stack: err.stack, error: err });
 
     // 2) Send generic message
     res.status(500).json({

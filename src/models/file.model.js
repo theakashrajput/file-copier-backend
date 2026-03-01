@@ -23,6 +23,14 @@ const fileSchema = new Schema(
       ref: 'User',
       required: true,
     },
+    sharedToken: {
+      type: String,
+      sparse: true,
+      unique: true,
+    },
+    sharedTokenExpiresAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true,
